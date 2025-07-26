@@ -1,138 +1,42 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Justin Halek | Game Dev Portfolio</title>
+  <link rel="stylesheet" href="style.css">
+</head>
 <body>
-<h1>GitGet</h1>
-<form id="form1">
-  Github username:<br>
-  <input id="in" type="text" name="username"><br>
-  Search Depth(1-50):<br>
-  <input id="depth" type="number" name="Search Depth" min="1" max="50" value="10"><br>
-  Personal Access Token:<br>
-  <input id="tkn" type="text" name="Github Token"><br>
-  Seach:
-  <button id="btn1" type="button" onclick="getgit()">Go</button>
 
-</form>
-<script>
+  <header>
+    <h1>Justin Halek</h1>
+    <p>Indie Game Developer • Code Wizard • Cat Dad</p>
+  </header>
 
-array = [];
-searchDepth=10;
-token = "";
+  <section class="projects">
+    <h2>Projects</h2>
+    <div class="grid">
+      <div class="card">
+        <img src="images/400x300.svg" alt="Project 1">
+        <h3>Rogue Slots</h3>
+        <p>A roguelike slot machine dungeon crawler.</p>
+      </div>
+      <div class="card">
+        <img src="images/400x300.svg" alt="Project 2">
+        <h3>Goo-ed Together</h3>
+        <p>Physics rage platformer for two players.</p>
+      </div>
+      <div class="card">
+        <img src="images/400x300.svg" alt="Project 3">
+        <h3>Reality Core</h3>
+        <p>Twin-stick shooter across infinite realities.</p>
+      </div>
+    </div>
+  </section>
 
-function getgit()
-{	token=document.getElementById("form1").tkn.value
-	searchDepth=document.getElementById("form1").depth.value
-	if (searchDepth<1){searchDepth=1;}
-	if (searchDepth>50){searchDepth=50;}
-	
-	var uname=document.getElementById("form1").in.value
-	var str ="https://api.github.com/users/"+uname
-	
-	document.write("<h1>GitGet</h1> <br />");
-	document.write(getUserInfo(str));
-	document.write("<br /> <b>Emailed pulled from owned repos: </b><br />")
-	str ="https://api.github.com/users/"+uname+"/repos"
-	document.write(httpGet(str));
+  <footer>
+    <p>© 2025 Justin Halek — <a href="https://github.com/jhalek90">GitHub</a> | <a href="mailto:your@email.com">Contact</a></p>
+  </footer>
 
-}
-
-function httpGet(theUrl)//gets repo list
-{
-	
-	var result = ""
-    var xmlHttp = new XMLHttpRequest();
-    xmlHttp.open( "GET", theUrl, false );
-	xmlHttp.setRequestHeader('Authorization', 'token ' + token);
-    xmlHttp.send( null );
-	var obj = JSON.parse(xmlHttp.responseText);
-	
-	for (var i=0; i<searchDepth; i++){
-		if (typeof obj[i] !== "undefined"){
-			if (typeof obj[i].owner.login !== "undefined"){
-				var hold=obj[i].owner.login
-				if (typeof obj[i].name !== "undefined"){
-					if (obj[i].fork == false){
-						var hold=""
-						result += (hold+"  "+getEmail("https://api.github.com/repos/"+obj[i].owner.login+"/"+obj[i].name+"/commits")); 	
-					}
-					
-					if (obj[i].fork == true){
-						searchDepth=(searchDepth+1);
-					}
-				}
-			}
-		}else{
-		i=(searchDepth+1);
-		}
-	}
-	
-	return result
-}
-
-
-function getEmail(theUrl)//pulls emails from commits on a repo
-{
-	var result = ""
-    var xmlHttp = new XMLHttpRequest();
-    xmlHttp.open( "GET", theUrl, false ); 
-	xmlHttp.setRequestHeader('Authorization', 'token ' + token);
-    xmlHttp.send( null );
-	var obj = JSON.parse(xmlHttp.responseText);
-	
-	for (var i=0; i<searchDepth; i++){
-		if (typeof obj[i] !== "undefined"){
-			if (typeof obj[i].commit.author.email !== "undefined"){
-				var hold = obj[i].commit.author.name
-				hold += "  -  "+obj[i].commit.author.email + "<br />"
-				
-				if (array.indexOf(hold) == -1){
-					array.push(hold);
-					result += (" - "+hold);
-				} 
-			}
-		}else{
-		i=(searchDepth+1);
-		}
-	}
-	return result
-}
-
-function getUserInfo(theUrl)
-{
-	var result = ""
-    var xmlHttp = new XMLHttpRequest();
-    xmlHttp.open( "GET", theUrl, false ); // false for synchronous request
-	xmlHttp.setRequestHeader('Authorization', 'token ' + token);
-    xmlHttp.send( null );
-	var obj = JSON.parse(xmlHttp.responseText);
-	var hold = "No info"
-	
-	if ((typeof obj.login !== "undefined") && (obj.login !== null)){
-		result += ("<b>Username:</b> "+obj.login+"<br />"); 
-	}
-	
-	if ((typeof obj.name !== "undefined") && (obj.name !== null)){
-		result += ("<b>Name:</b> "+obj.name+"<br />"); 
-	}
-	
-	if ((typeof obj.location !== "undefined") && (obj.location !== null)){
-		result += ("<b>Location:</b> "+obj.location+"<br />"); 
-	}
-	
-	if ((typeof obj.company !== "undefined") && (obj.company !== null)){
-		result += ("<b>Company:</b> "+obj.company+"<br />"); 
-	}
-	
-	if ((typeof obj.bio !== "undefined") && (obj.bio !== null)){
-		result += ("<b>Bio:</b> "+obj.bio+"<br />"); 
-	}
-	
-	if ((typeof obj.email !== "undefined") && (obj.email !== null)){
-		result += ("<b>Email:</b> "+obj.email+"<br />"); 
-	}
-	
-	return result
-}
-</script>
 </body>
 </html>
